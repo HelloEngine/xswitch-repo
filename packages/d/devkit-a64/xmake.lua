@@ -7,7 +7,7 @@ package("devkit-a64")
     add_versions("1.0.0", "cbebe417785f186c6cc8a7d207a706d80080953f1f52bdb0ff60ce51739765cf")
     set_description("Nintendo Switch aarch64-none-elf toolchain")
     set_homepage("https://github.com/devkitPro")
-    if is_plat("mingw") and is_arch("x86_64") then
+    if (is_plat("mingw") or is_plat("linux")) and is_arch("x86_64") then
         add_urls("https://wii.leseratte10.de/devkitPro/devkitA64/$(version)", {version = function(version)
             return versionUrls[version:shortstr()]
         end})
@@ -17,7 +17,7 @@ package("devkit-a64")
         package:addenv("DEVKITA64", package:installdir())
     end)
 
-    on_install("mingw|x86_64", function(package)
+    on_install("mingw|x86_64", "linux|x86_64" function(package)
         os.cp("opt/devkitpro/devkitA64/aarch64-none-elf", package:installdir())
         os.cp("opt/devkitpro/devkitA64/bin", package:installdir())
         os.cp("opt/devkitpro/devkitA64/include", package:installdir())
