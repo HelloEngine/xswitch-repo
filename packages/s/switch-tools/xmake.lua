@@ -16,7 +16,7 @@ package("switch-tools")
         package:addenv("SWITCH_TOOLS", package:installdir())
     end)
 
-    on_install("mingw|x86_64", "linux|x86_64" function(package)
+    on_install("mingw|x86_64", "linux|x86_64", function(package)
         print("install")
         os.cp("opt/devkitpro/tools/bin", package:installdir())
     end)
