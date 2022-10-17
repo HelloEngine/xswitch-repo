@@ -15,7 +15,7 @@ package("devkit-a64")
         package:addenv("DEVKITA64", package:installdir())
     end)
 
-    on_install("mingw@msys", "cross@msys", "linux@msys", function(package)
+    on_install("cross@windows", "cross@msys", function(package)
         os.cp("opt/devkitpro/devkitA64/aarch64-none-elf", package:installdir())
         os.cp("opt/devkitpro/devkitA64/bin", package:installdir())
         os.cp("opt/devkitpro/devkitA64/include", package:installdir())

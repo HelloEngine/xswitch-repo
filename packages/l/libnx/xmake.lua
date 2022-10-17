@@ -8,53 +8,64 @@ package("libnx")
 
     add_deps("bin2s")
 
-    on_install("mingw@msys", "cross@msys", "linux@msys", function(package)
+    on_install("cross@windows", "cross@msys", function(package)
         local configs = {}
-        io.writefile("xmake.lua", string.format([[
-            add_repositories("xswitch-repo https://github.com/HelloEngine/xswitch-repo.git main")
+        io.writefile("nx/switch.specs", [[
+%rename link                old_link
 
+*link:
+%(old_link) -T %:getenv(LIBNX /switch.ld) -pie --no-dynamic-linker --spare-dynamic-tags=0 --gc-sections -z text -z nodynamic-undefined-weak --build-id=sha1 --nx-module-name
+
+*startfile:
+crti%O%s crtbegin%O%s --require-defined=main
+        ]])
+        io.writefile("xmake.lua", string.format([[
+            add_rules("mode.debug", "mode.release")
+            set_plat("cross")
+            --set_version("%s")
             toolchain("aarch64-none-elf")
-                set_description("Nintendo Switch aarch64-none-elf toolchain")
-                set_homepage("https://github.com/devkitPro")
                 set_kind("cross")
                 on_load(function (toolchain)
                     toolchain:load_cross_toolchain()
                 end)
             toolchain_end()
 
+            add_repositories("xswitch-repo https://github.com/HelloEngine/xswitch-repo.git main")
             add_requires("devkit-a64")
-
-            set_version("%s")
-            set_basename("nx")
             target("libnx")
+                set_basename("nx")
                 set_toolchains("aarch64-none-elf@devkit-a64")
                 set_kind("static")
                 add_defines("LIBNX_NO_DEPRECATION", "__SWITCH__")
-                add_files("nx/source/**.s","nx/source/**.c")
+                add_files("nx/source/**.s","nx/source/**.c", "nx/data/**.s")
                 add_includedirs("nx/data/","nx/include/", "nx/include/switch/", "nx/external/bsd/include/")
                 on_install(function(target)
                     os.cp(target:targetfile(), target:installdir() .. "/lib/")
                     os.cp(target:scriptdir() .. "/nx/include", target:installdir())
                     os.cp(target:scriptdir() .. "/nx/external/bsd/include", target:installdir())
                     os.cp(target:scriptdir() .. "/nx/default_icon.jpg", target:installdir())
+                    os.cp(target:scriptdir() .. "/nx/switch.specs", target:installdir())
+                    os.cp(target:scriptdir() .. "/nx/switch.ld", target:installdir())
                 end)
                 add_cflags("-g", 
-                    "-Wall", 
+                    --"-Wall", 
                     "-Werror",
                     "-ffunction-sections", 
                     "-fdata-sections", 
                     "-march=armv8-a+crc+crypto", 
                     "-mtune=cortex-a57",
-                    "-mtp=soft","-fPIC", 
+                    "-mtp=soft",
+                    "-fPIC", 
                     "-ftls-model=local-exec")
                 add_cxxflags("-g", 
-                    "-Wall", 
+                    --"-Wall", 
                     "-Werror",
                     "-ffunction-sections", 
                     "-fdata-sections", 
                     "-march=armv8-a+crc+crypto", 
                     "-mtune=cortex-a57",
-                    "-mtp=soft","-fPIC", 
+                    "-mtp=soft",
+                    "-fPIC", 
                     "-ftls-model=local-exec",
                     "-fno-rtti",
                     "-fno-exceptions",
@@ -62,16 +73,21 @@ package("libnx")
                 add_asflags("-g",
                     "-march=armv8-a+crc+crypto", 
                     "-mtune=cortex-a57",
-                    "-mtp=soft","-fPIC", 
+                    "-mtp=soft",
+                    "-fPIC", 
                     "-ftls-model=local-exec")
                 if is_mode("debug") then
                     set_suffixname("d")
                 end
-
         ]], package:version_str()))
         local binfile = string.format("%s/nx/data/default_font.bin", os.curdir())
         assert(os.exists(binfile))
-        local outdata, errdata = os.iorun(string.format("bin2s %s", binfile))
+        local outdata, errdata
+        if is_subhost("msys") then
+            outdata, errdata = os.iorun(string.format("bin2s %s", binfile))
+        else
+            outdata, errdata = os.iorun(string.format("bin2s.exe %s", binfile))
+        end
         io.writefile("nx/data/default_font_bin.s", outdata)
         io.writefile("nx/data/default_font_bin.h", [[
             #pragma once
@@ -83,6 +99,7 @@ package("libnx")
     end)
 
     on_load(function(package)
+        package:addenv("LIBNX", package:installdir())
     end)
 
     on_test(function(package)

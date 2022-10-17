@@ -14,7 +14,7 @@ package("devkit-a64-gdb")
         package:addenv("DEVKITA64_GDB", package:installdir())
     end)
 
-    on_install("mingw@msys", "cross@msys", "linux@msys", function(package)
+    on_install("cross@msys","cross@windows", function(package)
         os.cp("opt/devkitpro/devkitA64/bin", package:installdir())
         os.cp("opt/devkitpro/devkitA64/include", package:installdir())
         os.cp("opt/devkitpro/devkitA64/lib", package:installdir())

@@ -6,10 +6,15 @@ package("bin2s")
     on_install("@windows", "@msys", function(package)
         io.writefile("xmake.lua", [[
             target("bin2s")
+                set_plat("windows")
                 set_toolchains("mingw")
                 set_kind("binary")
                 on_install(function(target)
-                    os.cp(target:targetfile() .. ".exe", target:installdir())
+                    if is_subhost("msys") then
+                        os.cp(target:targetfile() .. ".exe", target:installdir())
+                    else
+                        os.cp(target:targetfile(), target:installdir())
+                    end
                 end)
                 add_cxxflags("-std=c++11", "-Wextra", "-Wpedantic", "-Werror")
                 if is_mode("debug") then
@@ -26,8 +31,13 @@ package("bin2s")
     end)
 
     on_load(function(package)
-        print("on_load:" .. package:name())
         package:addenv("PATH", package:installdir())
+        --这里加一下mingw环境变量，免得依赖了bin2s不能直接在os.run里使用
+        import("detect.sdks.find_mingw")
+        local mingw = find_mingw()
+        if mingw then
+            package:addenv("PATH", mingw.bindir)
+        end
     end)
 
     on_test(function(package)

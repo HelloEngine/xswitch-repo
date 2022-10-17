@@ -14,7 +14,7 @@ package("switch-tools")
         package:addenv("SWITCH_TOOLS", package:installdir())
     end)
 
-    on_install("mingw@msys", "cross@msys", "linux@msys", function(package)
+    on_install("cross@windows", "cross@msys", function(package)
         os.cp("opt/devkitpro/tools/bin", package:installdir())
     end)
 
