@@ -1,6 +1,6 @@
 # xswitch-repo
 
-It is used to cross compile Nintendo Switch applications for windows and msys2
+It is used to cross compile Nintendo Switch applications on windows or msys2
 
 # how to use those packages to build nro
 
