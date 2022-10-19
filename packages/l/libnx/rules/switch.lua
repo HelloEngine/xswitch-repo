@@ -2,8 +2,8 @@ rule("switch")
     on_config(function(target)
         target:set("policy", "check.auto_ignore_flags", false)
 
-        -- local specs = project.required_package("libnx"):installdir() .. "/switch.specs"
-        local specs = os.getenv("LIBNX") .. "/switch.specs"
+        -- local specs = project.required_package("libnx"):installdir() .. "/xswitch.specs"
+        local specs = os.getenv("LIBNX") .. "/xswitch.specs"
 
         local arch = {
             "-march=armv8-a+crc+crypto", 
