@@ -1,27 +1,22 @@
-local versionUrls = {
-    ["1.0.0"] = "r19%20%282022-05-30%29/devkitA64-r19-2-windows_x86_64.pkg.tar.xz"
-}
-
 package("devkit-a64")
     set_kind("toolchains")
-    add_versions("1.0.0", "cbebe417785f186c6cc8a7d207a706d80080953f1f52bdb0ff60ce51739765cf")
+    add_versions("1.0.0", "04220597542a32d40fec13e07f2964685d0cd78e0ada92ec0a6584f90aad37f5")
     set_description("Nintendo Switch aarch64-none-elf toolchain")
-    set_homepage("https://github.com/devkitPro")
-    add_urls("https://wii.leseratte10.de/devkitPro/devkitA64/$(version)", {version = function(version)
-        return versionUrls[version:shortstr()]
-    end})
+    set_homepage("https://github.com/HelloEngine/devkit-a64")
+    add_urls("https://github.com/HelloEngine/devkit-a64/releases/download/$(version)/devkit-a64.zip")
 
     on_load(function(package)
         package:addenv("DEVKITA64", package:installdir())
     end)
 
     on_install("cross@windows", "cross@msys", function(package)
-        os.cp("opt/devkitpro/devkitA64/aarch64-none-elf", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/bin", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/include", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/lib", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/libexec", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/share", package:installdir())
+        os.cp("aarch64-none-elf", package:installdir())
+        os.cp("bin", package:installdir())
+        os.cp("include", package:installdir())
+        os.cp("lib", package:installdir())
+        os.cp("libexec", package:installdir())
+        os.cp("share", package:installdir())
+        os.cp("xmake.lua", package:installdir() .. "/xmake.lua")
     end)
 
     on_test(function(package)

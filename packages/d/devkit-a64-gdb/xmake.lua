@@ -1,24 +1,19 @@
-local versionUrls = {
-    ["1.0.0"] = "devkitA64-gdb-11.2-1-windows_x86_64.pkg.tar.xz"
-}
-
 package("devkit-a64-gdb")
-    add_versions("1.0.0", "e175365b760f3360b612400da4488ebd779b2b8e8c35f4a2163d2e66222cff08")
+    add_versions("1.0.0", "7c09d4c518cab53d8efc108c3c9b7fa1ea3fe58cb53bb1d0a5c385d6a2d6731b")
     set_description("Nintendo Switch aarch64-none-elf gdb")
-    set_homepage("https://github.com/devkitPro")
-    add_urls("https://wii.leseratte10.de/devkitPro/devkitA64/devkitA64-gdb/$(version)", {version = function(version)
-        return versionUrls[version:shortstr()]
-    end})
+    set_homepage("https://github.com/HelloEngine/devkit-a64-gdb")
+    add_urls("https://github.com/HelloEngine/devkit-a64-gdb/releases/download/$(version)/devkit-a64-gdb.zip")
 
     on_load(function(package)
         package:addenv("DEVKITA64_GDB", package:installdir())
     end)
 
     on_install("cross@msys","cross@windows", function(package)
-        os.cp("opt/devkitpro/devkitA64/bin", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/include", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/lib", package:installdir())
-        os.cp("opt/devkitpro/devkitA64/share", package:installdir())
+        os.cp("bin", package:installdir())
+        os.cp("include", package:installdir())
+        os.cp("lib", package:installdir())
+        os.cp("share", package:installdir())
+        os.cp("xmake.lua", package:installdir() .. "/xmake.lua")
     end)
 
     on_test(function(package)
