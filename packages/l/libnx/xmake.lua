@@ -25,4 +25,18 @@ package("libnx")
         os.cp("xswitch.specs", package:installdir() .. "/xswitch.specs")
         os.cp("xmake.lua", package:installdir() .. "/xmake.lua")
     end)
+
+    on_fetch("cross@windows", "cross@msys", function(package, opt)
+        local result = {}
+        if is_mode("debug") then
+            result.linkdirs = package:installdir("lib/debug")
+            result.links = "nxd"
+        else
+            result.linkdirs = package:installdir("lib/release")
+            result.links = "nx"
+        end
+        result.includedirs = package:installdir("include")
+        result.version = package:version_str()
+        return result
+     end)
 package_end()
