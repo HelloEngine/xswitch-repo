@@ -10,7 +10,7 @@ package("libnx")
     -- end)
 
     add_versions("1.0.0", "153b032d8369cd55e5c031ad0471c695045778a4d5fcca506b9018445a98026a")
-    add_versions("1.0.1", "717bf093c36e735f883262391c00a076f23fad7522b5be585b82763d86a78003")
+    add_versions("1.0.1", "fa164316515f3a658571f1a8e2354eae0526bec5a64ef275ff4f18ef2bb11f6d")
     add_urls("https://github.com/HelloEngine/libnx/releases/download/$(version)/libnx.zip")
 
     on_load(function(package)
