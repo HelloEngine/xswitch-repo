@@ -30,7 +30,7 @@ add_requires("devkit-a64","libnx")
 target("test")
     set_toolchains("aarch64-none-elf@devkit-a64")
     add_packages("libnx")
-    add_rules("@libnx/switch")
+    add_rules("@libnx/switch.binary")
     set_kind("binary")
 ```
 
@@ -89,7 +89,7 @@ add_requires("libnx")
 
 target("test")
     add_packages("libnx")
-    add_rules("@libnx/switch")
+    add_rules("@libnx/switch.lib")
 ```
 
 ## switch-glad
@@ -109,7 +109,6 @@ add_requires("devkit-a64", "libnx", "switch-glad")
 
 target("simple_triangle")
     set_toolchains("aarch64-none-elf@devkit-a64")
-    set_kind("binary")
     add_packages("libnx", "switch-glad")
-    add_rules("@libnx/switch")
+    add_rules("@libnx/switch.binary")
 ```
