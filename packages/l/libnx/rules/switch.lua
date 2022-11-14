@@ -33,6 +33,7 @@ rule("switch.binary")
         -- flags
         target:set("policy", "check.auto_ignore_flags", false)
         target:set("kind", "binary")
+        target:set("toolchains", "aarch64-none-elf@devkit-a64")
 
         local libnxPath = os.getenv("LIBNX")
         if not libnxPath then
