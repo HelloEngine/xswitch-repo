@@ -5,6 +5,9 @@ package("switch-glad")
     add_versions("1.0.0", "1000f80fcc559e0ec4ce3ef808620fd0266ef519a73ace72ffe1c18c36943b90")
     add_urls("https://github.com/HelloEngine/switch-glad/releases/download/$(version)/switch-glad.zip")
 
+    add_deps("switch-mesa")
+    add_links("EGL", "glapi")
+
     on_install("cross@windows", "cross@msys", function(package)
         os.cp("include", package:installdir())
         os.cp("lib", package:installdir())

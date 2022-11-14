@@ -13,6 +13,8 @@ package("libnx")
     add_versions("1.0.1", "fa164316515f3a658571f1a8e2354eae0526bec5a64ef275ff4f18ef2bb11f6d")
     add_urls("https://github.com/HelloEngine/libnx/releases/download/$(version)/libnx.zip")
 
+    add_deps("switch-tools")
+
     on_load(function(package)
         package:addenv("LIBNX", package:installdir())
     end)
