@@ -18,4 +18,13 @@ package("switch-mesa")
         os.cp("share", package:installdir())
         os.cp("xmake.lua", package:installdir() .. "/xmake.lua")
     end)
+
+    on_fetch("cross@windows", "cross@msys", function(package, opt)
+        local result = {}
+        result.linkdirs = package:installdir("lib")
+        result.links = {"EGL", "glapi"}
+        result.includedirs = package:installdir("include")
+        result.version = package:version_str()
+        return result
+     end)
 package_end()
