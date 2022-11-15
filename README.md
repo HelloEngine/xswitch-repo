@@ -28,8 +28,8 @@ add_repositories("xswitch-repo https://github.com/HelloEngine/xswitch-repo.git m
 add_requires("devkit-a64","libnx")
 
 target("test")
-    add_packages("libnx")
-    add_rules("@libnx/switch.binary")
+    add_packages("libnx", "devkit-a64")
+    add_rules("@libnx/switch.nro", "@devikit-a64/switch.binary")
     set_kind("binary")
 ```
 
@@ -58,6 +58,8 @@ add_repositories("xswitch-repo https://github.com/HelloEngine/xswitch-repo.git m
 add_requires("devkit-a64")
 
 target("test")
+    add_packages("devkit-a64")
+    add_rules("@devikit-a64/switch.lib")
     set_toolchains("aarch64-none-elf@devkit-a64")
 ```
 
@@ -88,7 +90,7 @@ add_requires("libnx")
 
 target("test")
     add_packages("libnx")
-    add_rules("@libnx/switch.lib")
+    add_rules("@libnx/switch.nro")
 ```
 
 ## switch-glad
@@ -107,6 +109,6 @@ add_repositories("xswitch-repo https://github.com/HelloEngine/xswitch-repo.git m
 add_requires("devkit-a64", "libnx", "switch-glad")
 
 target("simple_triangle")
-    add_packages("libnx", "switch-glad")
-    add_rules("@libnx/switch.binary")
+    add_packages("devkit-a64", "libnx", "switch-glad")
+    add_rules("@devkit-a64/switch.binary", "@libnx/switch.nro")
 ```
