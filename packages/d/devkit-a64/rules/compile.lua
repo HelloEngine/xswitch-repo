@@ -9,7 +9,7 @@ on_config(function(target)
     local arch, cflags, cxxflags, asflags, ldflags
     if target:get("kind") == "static" then
         arch = {
-            "-march=armv8-a", 
+            "-march=armv8-a+crc+crypto", 
             "-mtune=cortex-a57", 
             "-mtp=soft", 
             "-fPIC", 
