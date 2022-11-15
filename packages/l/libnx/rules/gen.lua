@@ -1,4 +1,49 @@
-rule("switch.nro")
+rule("gen.elf")
+    on_config(function(target)
+        if target:get("kind") ~= "binary" then
+            raise("unsopported target kind")
+        end
+
+        target:set("policy", "check.auto_ignore_flags", false)
+        local libnxPath = os.getenv("LIBNX")
+        if not libnxPath then
+            import("core.project.project")
+            local libnx = project.required_package("libnx")
+            if not libnx then
+                raise("please add add_requires(\"libnx\") to xmake.lua!")
+            end
+            libnxPath = libnx:installdir()
+        end
+        local specs = libnxPath .. "/xswitch.specs"
+        target:add("ldflags",  "-specs=" .. specs)
+    end)
+    
+    on_link(function(target)
+        --make env correct
+        local libnxPath = os.getenv("LIBNX")
+        if not libnxPath then
+            import("core.project.project")
+            local libnx = project.required_package("libnx")
+            if not libnx then
+                raise("please add add_requires(\"libnx\") to xmake.lua!")
+            end
+            os.addenv("LIBNX", libnx:installdir())
+        end
+
+        import("core.tool.linker")
+        import("core.project.config")
+        print("on_link:" .. linker.linkcmd("binary", {"cc", "cxx", "as"}, target:objectfiles(), target:name() .. ".elf", {
+            target = target
+        }))
+        local buildir = config.get("buildir")
+        local outfile = string.format("%s/%s.elf", buildir, target:name())
+        linker.link("binary", {"cc", "cxx", "as"}, target:objectfiles(), outfile, {
+            target = target
+        })
+    end)
+rule_end()
+
+rule("gen.nro")
     after_link(function(target)
         -- -- Import task module
         -- import("core.project.task")
@@ -12,12 +57,22 @@ rule("switch.nro")
         -- romfsdir [可选]romfs目录
         import("core.project.project")
         import("core.project.config")
+
+        local libnxPath = os.getenv("LIBNX")
+        if not libnxPath then
+            local libnx = project.required_package("libnx")
+            if not libnx then
+                raise("please add add_requires(\"libnx\") to xmake.lua!")
+            end
+            libnxPath = libnx:installdir()
+        end
+
         -- 参数
         local author = target:values("author") or "HelloGame"
         local version = target:values("version") or "1.0.0"
         local apptitle = target:values("apptitle") or target:name()
         local titleid = target:values("titleid") or false
-        local default_icon = os.getenv("LIBNX") .. "/default_icon.jpg"
+        local default_icon = libnxPath .. "/default_icon.jpg"
         local icon = target:values("icon") or default_icon
         local romfsdir = target:values("romfsdir") or false
         -- 标准方式只需要add_requires("switch-tools"),不需要去add_packages("switch-tools")
