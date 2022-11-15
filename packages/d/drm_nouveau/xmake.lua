@@ -2,6 +2,7 @@ package("drm_nouveau")
     set_description("Interface between mesa/nouveau and Nintendo Switch Nvidia GPU driver")
     set_homepage("https://github.com/HelloEngine/libdrm_nouveau")
     add_versions("1.0.0", "20ffec756e32d10cdd93956dca44891c31acf9c265611d8dbafaf1fd73f16c2c")
+    add_versions("1.0.1", "7ae70ed89b431bb74bfb3d192acd31250640f829693afdffde3918a035ab4e6a")
     add_urls("https://github.com/HelloEngine/libdrm_nouveau/releases/download/$(version)/drm_nouveau.zip")
 
     add_deps("libnx")
