@@ -1,6 +1,7 @@
 package("devkit-a64")
     set_kind("toolchains")
     add_versions("1.0.0", "04220597542a32d40fec13e07f2964685d0cd78e0ada92ec0a6584f90aad37f5")
+    add_versions("1.0.1", "0b656816eb5422efc4dbfcbc681d59a40b38f3a6c1ba3268ccd6669dd22fb3a9")
     set_description("Nintendo Switch aarch64-none-elf toolchain")
     set_homepage("https://github.com/HelloEngine/devkit-a64")
     add_urls("https://github.com/HelloEngine/devkit-a64/releases/download/$(version)/devkit-a64.zip")
