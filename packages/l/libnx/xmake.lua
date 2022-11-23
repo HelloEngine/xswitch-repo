@@ -12,6 +12,7 @@ package("libnx")
     add_versions("1.0.0", "153b032d8369cd55e5c031ad0471c695045778a4d5fcca506b9018445a98026a")
     add_versions("1.0.1", "fa164316515f3a658571f1a8e2354eae0526bec5a64ef275ff4f18ef2bb11f6d")
     add_versions("1.0.2", "db32daa3580bdffd0160634f14850a71b5d220e90b52fde67906fa06088269f2")
+    add_versions("1.0.3", "d6b8de5214fd408b94b3208d572931878764c545d3df6550d7c3b2777867c8ba")
     add_urls("https://github.com/HelloEngine/libnx/releases/download/$(version)/libnx.zip")
 
     add_deps("devkit-a64")
